@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#f6edf1">
+  <meta name="description" content="心屿 · 一座留给两个人的小岛。选择她的性格，为她命名，然后开始一段被好好收藏的对话。">
+  <title>心屿 · AI 女友</title>
+  <link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" type="image/svg+xml">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script type="module" src="{{ url_for('static', filename='js/app.js') }}"></script>
+</head>
+<body data-screen="personality">
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <!-- SVG 图标库：全部内联，无外部网络依赖 -->
+  <svg class="svg-sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="icon-gentle" viewBox="0 0 120 120">
+      <path d="M74 23a34 34 0 1 0 22 50A30 30 0 0 1 74 23Z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M38 74c-2 9-6 15-13 21" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M25 66c6 0 10 4 10 10-6 0-10-4-10-10Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+      <path d="M30 83c-5-3-10-2-13 2 4 4 9 4 13-2ZM30 83c5-3 10-2 13 2-4 4-9 4-13-2ZM30 83c0-6 3-10 8-11 2 5-1 10-8 11ZM30 83c0-6-3-10-8-11-2 5 1 10 8 11Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+      <circle cx="90" cy="42" r="2.2" fill="currentColor"/>
+      <circle cx="94" cy="57" r="1.4" fill="currentColor" opacity=".6"/>
+      <path d="M42 34c1 4 3 6 7 7-4 1-6 3-7 7-1-4-3-6-7-7 4-1 6-3 7-7Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="icon-grumpy" viewBox="0 0 120 120">
+      <path d="M62 19c5 13 1 20-5 27-5-8-12-12-12-12 3 12-8 18-8 31 0 15 12 27 27 27s27-12 27-27c0-16-12-26-19-36-1 9-5 14-9 17 3-13-2-22-1-27Z" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M52 73c3-5 8-5 11 0 3-5 8-5 11 0-1 8-5 13-11 17-6-4-10-9-11-17Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+      <path d="M95 30c1 5 3 7 8 8-5 1-7 3-8 8-1-5-3-7-8-8 5-1 7-3 8-8Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+      <circle cx="28" cy="45" r="1.8" fill="currentColor" opacity=".7"/>
+      <circle cx="99" cy="61" r="1.4" fill="currentColor" opacity=".5"/>
+    </symbol>
+    <symbol id="icon-sharp" viewBox="0 0 120 120">
+      <path d="M60 17c2 23 10 31 33 33-23 2-31 10-33 33-2-23-10-31-33-33 23-2 31-10 33-33Z" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linejoin="round"/>
+      <path d="M92 71c1 10 4 13 14 14-10 1-13 4-14 14-1-10-4-13-14-14 10-1 13-4 14-14Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+      <circle cx="37" cy="79" r="13" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="2 5" opacity=".75"/>
+      <circle cx="37" cy="79" r="2.2" fill="currentColor"/>
+      <path d="M28 28h9M32.5 23.5v9" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" opacity=".7"/>
+    </symbol>
+    <symbol id="icon-arrow-right" viewBox="0 0 24 24">
+      <path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="icon-arrow-left" viewBox="0 0 24 24">
+      <path d="M20 12H5M11 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="icon-check" viewBox="0 0 24 24">
+      <path d="m5 12.5 4.3 4.3L19 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="icon-menu" viewBox="0 0 24 24">
+      <path d="M4 8h16M4 16h11" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="icon-close" viewBox="0 0 24 24">
+      <path d="m6 6 12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="icon-refresh" viewBox="0 0 24 24">
+      <path d="M20 7v5h-5M4 17v-5h5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M18.4 11.5A7 7 0 0 0 6.3 7.1M5.6 12.5a7 7 0 0 0 12.1 4.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="icon-lock" viewBox="0 0 24 24">
+      <rect x="5" y="10" width="14" height="10" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M8.5 10V7.8a3.5 3.5 0 0 1 7 0V10M12 14v2.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="icon-heart" viewBox="0 0 24 24">
+      <path d="M12 20.4C8.2 17.7 4 14.2 4 9.9A4.2 4.2 0 0 1 12 7.7a4.2 4.2 0 0 1 8 2.2c0 4.3-4.2 7.8-8 10.5Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="icon-send" viewBox="0 0 24 24">
+      <path d="m3.8 4.2 17 7.8-17 7.8 3.6-7.8-3.6-7.8Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+      <path d="M7.4 12h8.1" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="icon-sparkles" viewBox="0 0 24 24">
+      <path d="M12 3c.7 4.8 2.2 6.3 7 7-4.8.7-6.3 2.2-7 7-.7-4.8-2.2-6.3-7-7 4.8-.7 6.3-2.2 7-7Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+      <path d="M19 15c.3 2 1 2.7 3 3-2 .3-2.7 1-3 3-.3-2-1-2.7-3-3 2-.3 2.7-1 3-3Z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="icon-message" viewBox="0 0 24 24">
+      <path d="M5 5.5h14a1.5 1.5 0 0 1 1.5 1.5v9a1.5 1.5 0 0 1-1.5 1.5h-8.3L6 21v-3.5H5A1.5 1.5 0 0 1 3.5 16V7A1.5 1.5 0 0 1 5 5.5Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+      <path d="M8 10h8M8 13.5h5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="icon-shuffle" viewBox="0 0 24 24">
+      <path d="M4 7h3.5c4.5 0 4.5 10 9 10H20M16 13l4 4-4 4M4 17h3.5c1.7 0 2.8-1.4 3.7-3M16 3l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="icon-chevron-down" viewBox="0 0 24 24">
+      <path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+  </svg>
+
+  <!-- 氛围背景：柔光、花瓣与纸纹 -->
+  <div class="ambient" aria-hidden="true">
+    <span class="aurora aurora-one"></span>
+    <span class="aurora aurora-two"></span>
+    <span class="aurora aurora-three"></span>
+    <span class="petal petal-one"></span>
+    <span class="petal petal-two"></span>
+    <span class="petal petal-three"></span>
+    <span class="petal petal-four"></span>
+    <span class="petal petal-five"></span>
+  </div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="site-header" id="siteHeader">
+    <button class="brand" id="brandHome" type="button" aria-label="回到心屿首页">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 44 44">
+          <path d="M9 27c3.2-1.4 5.8-1.5 8.4-.2 3.8 2 6.5 1.8 9.4.2 2.8-1.5 5.2-1.5 8.2 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M22 18.8c-2.7-1.9-6.8-5.2-6.8-8.6 0-3.6 4.4-5.2 6.8-2 2.4-3.2 6.8-1.6 6.8 2 0 3.4-4.1 6.7-6.8 8.6Z" fill="currentColor" opacity=".92"/>
+          <path d="M14 33.5h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" opacity=".55"/>
+        </svg>
+      </span>
+      <span class="brand-copy">
+        <strong>心屿</strong>
+        <small>a quiet place for two</small>
+      </span>
+    </button>
+
+    <nav class="steps" aria-label="创建流程">
+      <span class="step is-current" data-step="personality" aria-current="step">
+        <i aria-hidden="true"></i><span>选择她</span>
+      </span>
+      <span class="step-line" aria-hidden="true"></span>
+      <span class="step" data-step="name">
+        <i aria-hidden="true"></i><span>为她命名</span>
+      </span>
+      <span class="step-line" aria-hidden="true"></span>
+      <span class="step" data-step="chat">
+        <i aria-hidden="true"></i><span>与她对话</span>
+      </span>
+    </nav>
+
+    <div class="privacy-mark">
+      <svg class="icon" aria-hidden="true"><use href="#icon-lock"></use></svg>
+      <span>只属于你</span>
+    </div>
+  </header>
+
+  <main class="app-stage" id="main">
+    <!-- ============================================================
+         页面 1：性格选择
+    ============================================================ -->
+    <section class="screen personality-screen is-active" data-screen="personality" aria-labelledby="personalityTitle">
+      <div class="landing-grid">
+        <div class="hero-copy">
+          <p class="hero-kicker"><span aria-hidden="true"></span>今晚，留一点时间给自己</p>
+          <h1 id="personalityTitle">
+            想和<span class="hero-word">谁<svg class="hero-stroke" viewBox="0 0 180 22" aria-hidden="true" preserveAspectRatio="none">
+                <path d="M5 15c45-10 92-12 168-4" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" opacity=".45"/>
+              </svg></span><br>
+            说说话？
+          </h1>
+          <p class="hero-lede">
+            三种脾气，三封没有署名的信。<br>
+            选一个让你心动的她，再给她取一个只属于你的名字。
+          </p>
+
+          <div class="hero-signature">
+            <span class="seal" aria-hidden="true">心<br>屿</span>
+            <p>在城市的缝隙里，<br>留一座只属于你们的小岛。</p>
+          </div>
+
+          <div class="continue-card" id="continueCard" hidden>
+            <div class="avatar continue-avatar avatar-ai" id="continueAvatar" data-personality="gentle" aria-hidden="true">
+              <svg class="avatar-icon"><use href="#icon-gentle"></use></svg>
+            </div>
+            <div class="continue-copy">
+              <p>上次，你叫她「<strong id="continueName">小满</strong>」</p>
+              <span id="continueMeta">温柔 · 已收藏 1 条悄悄话</span>
+            </div>
+            <button class="continue-button" id="continueButton" type="button">
+              继续
+              <svg class="icon" aria-hidden="true"><use href="#icon-arrow-right"></use></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="choice-area">
+          <div class="choice-heading">
+            <div>
+              <p class="section-kicker">第一步 · 先听从心跳</p>
+              <h2>选择她的性格</h2>
+            </div>
+            <p class="choice-constraint">只能选一位</p>
+          </div>
+
+          <div class="persona-grid" id="personaGrid">
+            <button class="persona-card" type="button" data-personality="gentle" aria-pressed="false">
+              <span class="select-badge" aria-hidden="true">
+                <svg class="icon"><use href="#icon-check"></use></svg>
+              </span>
+              <span class="persona-art art-gentle" aria-hidden="true">
+                <span class="art-orb"></span>
+                <svg class="art-icon"><use href="#icon-gentle"></use></svg>
+                <span class="art-caption">softly, with you</span>
+              </span>
+              <span class="card-body">
+                <span class="persona-title-row">
+                  <span class="persona-name">温柔</span>
+                  <span class="persona-english">warm</span>
+                </span>
+                <span class="persona-tagline">把晚风读成情书</span>
+                <span class="persona-desc">轻声细语，会记得你随口提过的小事。像一盏永远为你留着的暖灯。</span>
+                <span class="traits">
+                  <span>慢热</span><span>体贴</span><span>治愈</span>
+                </span>
+                <span class="persona-quote">“今天也辛苦了，靠过来一点，不用急着说话。”</span>
+              </span>
+            </button>
+
+            <button class="persona-card" type="button" data-personality="grumpy" aria-pressed="false">
+              <span class="select-badge" aria-hidden="true">
+                <svg class="icon"><use href="#icon-check"></use></svg>
+              </span>
+              <span class="persona-art art-grumpy" aria-hidden="true">
+                <span class="art-orb"></span>
+                <svg class="art-icon"><use href="#icon-grumpy"></use></svg>
+                <span class="art-caption">all bark, still soft</span>
+              </span>
+              <span class="card-body">
+                <span class="persona-title-row">
+                  <span class="persona-name">暴躁</span>
+                  <span class="persona-english">spiky</span>
+                </span>
+                <span class="persona-tagline">嘴硬，但心是软的</span>
+                <span class="persona-desc">会凶你两句，却总在最后偷偷关心你。傲娇得明明白白，也护短得明明白白。</span>
+                <span class="traits">
+                  <span>直球</span><span>傲娇</span><span>护短</span>
+                </span>
+                <span class="persona-quote">“气死我了……你吃饭了没？别以为我在关心你。”</span>
+              </span>
+            </button>
+
+            <button class="persona-card" type="button" data-personality="sharp" aria-pressed="false">
+              <span class="select-badge" aria-hidden="true">
+                <svg class="icon"><use href="#icon-check"></use></svg>
+              </span>
+              <span class="persona-art art-sharp" aria-hidden="true">
+                <span class="art-orb"></span>
+                <svg class="art-icon"><use href="#icon-sharp"></use></svg>
+                <span class="art-caption">clear eyes, soft spot</span>
+              </span>
+              <span class="card-body">
+                <span class="persona-title-row">
+                  <span class="persona-name">犀利</span>
+                  <span class="persona-english">clear</span>
+                </span>
+                <span class="persona-tagline">清醒地偏爱你</span>
+                <span class="persona-desc">看得通透、说话直接，只对你留一点柔软。会戳破你的逞强，也会稳稳接住你。</span>
+                <span class="traits">
+                  <span>聪明</span><span>毒舌</span><span>清醒</span>
+                </span>
+                <span class="persona-quote">“别绕弯子了，说重点——我在听。”</span>
+              </span>
+            </button>
+          </div>
+
+          <div class="choice-actions">
+            <p class="choice-hint" id="choiceHint" aria-live="polite">
+              <span aria-hidden="true"></span>
+              先选一个让你心动的她
+            </p>
+            <button class="btn btn-primary btn-next" id="nextButton" type="button" disabled>
+              <span>下一步</span>
+              <svg class="icon button-arrow" aria-hidden="true"><use href="#icon-arrow-right"></use></svg>
+            </button>
+          </div>
+          <p class="choice-footnote">之后可以随时回来，换一位她。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         页面 2：自定义命名
+    ============================================================ -->
+    <section class="screen name-screen" data-screen="name" aria-labelledby="nameTitle" hidden>
+      <div class="name-layout">
+        <div class="name-portrait-column">
+          <article class="portrait-card" id="portraitCard" data-personality="gentle">
+            <div class="portrait-art" id="portraitArt" data-personality="gentle" aria-hidden="true">
+              <span class="portrait-orb"></span>
+              <svg class="art-icon" id="portraitIcon"><use href="#icon-gentle"></use></svg>
+              <span class="portrait-lines"></span>
+            </div>
+            <p class="portrait-label">你遇见了</p>
+            <h2 id="selectedLabel">温柔</h2>
+            <p class="portrait-tagline" id="selectedTagline">把晚风读成情书</p>
+            <blockquote id="selectedLetter">她像一盏留在窗边的暖灯。不会追问你为何晚归，只会把汤重新热一遍，然后安静地听你讲完这一天。</blockquote>
+            <span class="portrait-seal" aria-hidden="true">心屿</span>
+          </article>
+          <div class="letter-note" aria-hidden="true">
+            <svg class="icon"><use href="#icon-sparkles"></use></svg>
+            <p>“她还没有名字。<br>但已经在等你了。”</p>
+          </div>
+        </div>
+
+        <div class="name-panel">
+          <button class="text-back" id="backToPersonality" type="button">
+            <svg class="icon" aria-hidden="true"><use href="#icon-arrow-left"></use></svg>
+            返回选择性格
+          </button>
+
+          <div class="name-heading">
+            <p class="section-kicker">第二步 · 为你们的相遇命名</p>
+            <h1 id="nameTitle">从今天起，<br>她就叫——</h1>
+          </div>
+
+          <form id="nameForm" novalidate>
+            <label class="field-label" for="girlName">她的名字</label>
+            <div class="name-input-row">
+              <input
+                id="girlName"
+                name="girlName"
+                type="text"
+                maxlength="10"
+                required
+                aria-required="true"
+                placeholder="比如：小满"
+                autocomplete="off"
+                autocapitalize="off"
+                spellcheck="false"
+                aria-describedby="nameHelp nameError"
+              >
+              <span class="char-counter" id="nameCounter" aria-hidden="true">0 / 10</span>
+            </div>
+            <p class="field-help" id="nameHelp">1–10 个字，昵称也可以。这个名字会一直被她记得。</p>
+            <p class="field-error" id="nameError" role="alert" aria-live="polite"></p>
+
+            <div class="name-ideas">
+              <span>没有头绪？</span>
+              <button type="button" data-suggest="小满">小满</button>
+              <button type="button" data-suggest="晚晚">晚晚</button>
+              <button type="button" data-suggest="阿梨">阿梨</button>
+              <button type="button" data-suggest="星野">星野</button>
+              <button class="random-name" id="randomName" type="button">
+                <svg class="icon" aria-hidden="true"><use href="#icon-shuffle"></use></svg>
+                换一个
+              </button>
+            </div>
+
+            <div class="name-actions">
+              <button class="btn btn-ghost" id="backButton" type="button">上一步</button>
+              <button class="btn btn-primary btn-confirm" id="confirmButton" type="submit" disabled>
+                <span>确认，开始聊天</span>
+                <svg class="icon button-arrow" aria-hidden="true"><use href="#icon-arrow-right"></use></svg>
+              </button>
+            </div>
+            <p class="save-note" id="saveNote" hidden>重新设定会清空当前对话，开启一段新的故事。</p>
+          </form>
+
+          <p class="privacy-note">
+            <svg class="icon" aria-hidden="true"><use href="#icon-lock"></use></svg>
+            你的设置与聊天只保存在这台设备的本地数据库中。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         页面 3：聊天
+    ============================================================ -->
+    <section class="screen chat-screen" data-screen="chat" aria-label="和她的对话" hidden>
+      <div class="chat-shell">
+        <aside class="chat-aside" id="chatAside" aria-label="她的人设与操作">
+          <div class="aside-head">
+            <span class="brand brand-small">
+              <span class="brand-mark" aria-hidden="true">
+                <svg viewBox="0 0 44 44">
+                  <path d="M9 27c3.2-1.4 5.8-1.5 8.4-.2 3.8 2 6.5 1.8 9.4.2 2.8-1.5 5.2-1.5 8.2 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  <path d="M22 18.8c-2.7-1.9-6.8-5.2-6.8-8.6 0-3.6 4.4-5.2 6.8-2 2.4-3.2 6.8-1.6 6.8 2 0 3.4-4.1 6.7-6.8 8.6Z" fill="currentColor" opacity=".92"/>
+                </svg>
+              </span>
+              <span class="brand-copy"><strong>心屿</strong><small>只属于你们</small></span>
+            </span>
+            <button class="icon-button close-aside" id="closeAside" type="button" aria-label="关闭人设面板">
+              <svg class="icon" aria-hidden="true"><use href="#icon-close"></use></svg>
+            </button>
+          </div>
+
+          <div class="aside-portrait">
+            <div class="aside-face" id="asideFace" data-personality="gentle" aria-hidden="true">
+              <span class="face-orb"></span>
+              <svg class="face-icon" id="asideIcon"><use href="#icon-gentle"></use></svg>
+            </div>
+            <p class="aside-eyebrow">你的她</p>
+            <h2 id="asideName">小满</h2>
+            <p class="aside-personality" id="asidePersonality">温柔 · warm</p>
+            <p class="aside-quote" id="asideQuote">“今天也辛苦了，靠过来一点，不用急着说话。”</p>
+          </div>
+
+          <div class="aside-memory">
+            <div class="memory-head">
+              <svg class="icon" aria-hidden="true"><use href="#icon-heart"></use></svg>
+              <span>只属于你们的记忆</span>
+            </div>
+            <p class="memory-stat" id="messageStat">已经收藏了 1 条悄悄话</p>
+            <p class="memory-hint">对话会保存在本地 SQLite 中，下次推门回来，她还在。</p>
+          </div>
+
+          <div class="aside-actions">
+            <button class="aside-action" id="switchPersona" type="button">
+              <span>换一位她</span>
+              <svg class="icon" aria-hidden="true"><use href="#icon-arrow-right"></use></svg>
+            </button>
+            <button class="aside-action" id="newChat" type="button">
+              <span>重新开始对话</span>
+              <svg class="icon" aria-hidden="true"><use href="#icon-refresh"></use></svg>
+            </button>
+          </div>
+          <p class="aside-foot">Heart Island · 心屿</p>
+        </aside>
+        <div class="aside-backdrop" id="asideBackdrop" hidden></div>
+
+        <div class="chat-main">
+          <header class="chat-header">
+            <button class="icon-button mobile-menu" id="openAside" type="button" aria-label="打开人设面板" aria-expanded="false" aria-controls="chatAside">
+              <svg class="icon" aria-hidden="true"><use href="#icon-menu"></use></svg>
+            </button>
+            <div class="chat-identity">
+              <div class="avatar avatar-ai" id="headerAvatar" data-personality="gentle" aria-hidden="true">
+                <svg class="avatar-icon"><use href="#icon-gentle"></use></svg>
+              </div>
+              <div>
+                <h2 id="chatName">小满</h2>
+                <p class="online"><span class="online-dot" aria-hidden="true"></span><span id="chatStatus">在你身边</span></p>
+              </div>
+            </div>
+            <div class="chat-header-actions">
+              <span class="mode-badge" id="modeBadge" title="当前回复来源">
+                <i aria-hidden="true"></i>
+                <span id="modeBadgeText">正在连接</span>
+              </span>
+              <button class="icon-button" id="headerNewChat" type="button" aria-label="重新开始对话" title="重新开始对话">
+                <svg class="icon" aria-hidden="true"><use href="#icon-refresh"></use></svg>
+              </button>
+            </div>
+          </header>
+
+          <div class="chat-body" id="chatScroll" tabindex="0">
+            <div class="history-loader" id="historyLoader" hidden aria-live="polite">
+              <span class="mini-spinner" aria-hidden="true"></span>
+              <span>正在拾起更早的对话…</span>
+            </div>
+            <div class="history-hint" id="historyHint" hidden>
+              <span aria-hidden="true">✦</span>
+              向上滑动，看看更早的故事
+            </div>
+            <div class="message-list" id="messageList" role="log" aria-live="polite" aria-relevant="additions text" aria-label="聊天记录"></div>
+
+            <div class="typing-row" id="typingIndicator" hidden>
+              <div class="avatar avatar-ai avatar-sm" id="typingAvatar" data-personality="gentle" aria-hidden="true">
+                <svg class="avatar-icon"><use href="#icon-gentle"></use></svg>
+              </div>
+              <div class="typing-bubble">
+                <span class="typing-name" id="typingName">小满</span>
+                <span class="typing-dots" aria-label="正在输入"><i></i><i></i><i></i></span>
+              </div>
+            </div>
+            <div class="chat-end" id="chatEnd" aria-hidden="true">
+              <span></span>
+              <svg class="icon"><use href="#icon-heart"></use></svg>
+              <span></span>
+            </div>
+          </div>
+
+          <button class="scroll-down" id="scrollDown" type="button" aria-label="回到最新消息" hidden>
+            <svg class="icon" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
+          </button>
+
+          <div class="composer-area">
+            <div class="prompt-chips" id="promptChips">
+              <span class="chips-label">不知道说什么？</span>
+              <button type="button" data-prompt="今天有点累">今天有点累</button>
+              <button type="button" data-prompt="夸夸我">夸夸我</button>
+              <button type="button" data-prompt="你现在在干嘛呀">你现在在干嘛呀</button>
+              <button type="button" data-prompt="跟我说句晚安吧">跟我说句晚安吧</button>
+            </div>
+            <form class="composer" id="composer">
+              <label class="sr-only" for="messageInput">输入消息</label>
+              <textarea id="messageInput" name="message" rows="1" maxlength="2000" placeholder="和她说点什么…" autocomplete="off" aria-describedby="composerHint"></textarea>
+              <div class="composer-side">
+                <span class="message-count" id="messageCount" aria-hidden="true"></span>
+                <button class="send-button" id="sendButton" type="submit" aria-label="发送消息" disabled>
+                  <svg class="icon" aria-hidden="true"><use href="#icon-send"></use></svg>
+                </button>
+              </div>
+            </form>
+            <div class="composer-meta" id="composerHint">
+              <span>Enter 发送 · Shift + Enter 换行</span>
+              <span id="replyMode">正在确认她的状态…</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 二次确认弹窗 -->
+  <dialog class="confirm-dialog" id="confirmDialog" aria-labelledby="dialogTitle" aria-describedby="dialogMessage">
+    <div class="dialog-inner">
+      <span class="dialog-icon" aria-hidden="true">
+        <svg class="icon"><use href="#icon-heart"></use></svg>
+      </span>
+      <h2 id="dialogTitle">要重新开始吗？</h2>
+      <p id="dialogMessage">现在的对话会被清空，只留下她重新对你说的第一句话。</p>
+      <div class="dialog-actions">
+        <button class="btn btn-ghost" id="dialogCancel" type="button">再想想</button>
+        <button class="btn btn-primary dialog-confirm" id="dialogConfirm" type="button">确认</button>
+      </div>
+    </div>
+  </dialog>
+
+  <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="false"></div>
+
+  <noscript>
+    <div class="noscript-note">心屿需要 JavaScript 才能点亮。请启用后刷新页面。</div>
+  </noscript>
+</body>
+</html>

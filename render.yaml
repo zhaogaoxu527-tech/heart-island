@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: heart-island
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: KIMI_API_KEY
+        sync: false
+      - key: KIMI_BASE_URL
+        value: https://api.moonshot.cn/v1
+      - key: KIMI_MODEL
+        value: kimi-k3
+      - key: KIMI_FALLBACK_LOCAL
+        value: true
+      - key: SECRET_KEY
+        generateValue: true

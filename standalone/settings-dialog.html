@@ -1,0 +1,98 @@
+<!-- 单文件版：大模型设置 -->
+<dialog class="settings-dialog" id="settingsDialog" aria-labelledby="settingsTitle">
+  <form class="settings-shell" id="settingsForm" novalidate>
+    <div class="settings-scroll">
+      <div class="settings-head">
+        <div>
+          <p class="section-kicker">模型连接</p>
+          <h2 id="settingsTitle">让对话连上真正的心跳</h2>
+        </div>
+        <button class="icon-button" id="closeSettings" type="button" aria-label="关闭模型设置">
+          <svg class="icon" aria-hidden="true"><use href="#icon-close"></use></svg>
+        </button>
+      </div>
+
+      <p class="settings-intro">
+        这是完全离线的单文件版，打开 HTML 即可开始。默认由内置角色引擎回复；
+        如果你有自己的 OpenAI 兼容模型服务，也可以在下方配置浏览器直连。
+      </p>
+
+      <div class="settings-mode-card">
+        <p class="settings-mode-label">
+          当前回复方式
+          <strong id="settingsModeLabel">本地体验模式</strong>
+        </p>
+        <p class="settings-mode-hint" id="settingsModeHint">
+          不发起外部请求，回复由内置的三种人设语料生成。
+        </p>
+      </div>
+
+      <div class="settings-fields">
+        <label class="settings-field" for="apiBaseUrl">
+          <span>API Base URL</span>
+          <input
+            id="apiBaseUrl"
+            type="url"
+            inputmode="url"
+            placeholder="https://api.deepseek.com/v1"
+            autocomplete="off"
+            spellcheck="false"
+          >
+        </label>
+
+        <label class="settings-field" for="apiModel">
+          <span>模型名称</span>
+          <input
+            id="apiModel"
+            type="text"
+            placeholder="deepseek-chat"
+            autocomplete="off"
+            spellcheck="false"
+          >
+        </label>
+
+        <label class="settings-field" for="apiKey">
+          <span>API Key</span>
+          <span class="settings-key-row">
+            <input
+              id="apiKey"
+              type="password"
+              placeholder="sk-..."
+              autocomplete="off"
+              spellcheck="false"
+            >
+            <button class="key-toggle" id="toggleApiKey" type="button">显示</button>
+          </span>
+        </label>
+      </div>
+
+      <label class="settings-check" for="apiEnabled">
+        <input id="apiEnabled" type="checkbox">
+        <span>
+          启用大模型直连
+          <small>仅保存在当前浏览器；关闭后立即回到本地体验模式。</small>
+        </span>
+      </label>
+
+      <p class="settings-warning">
+        <strong>关于浏览器直连：</strong>
+        单文件版会让浏览器直接请求模型服务。若该服务不允许跨域（CORS），请求会失败并自动回退为本地回复。密钥也仅保存在当前浏览器的 localStorage 中，请勿在公共电脑上填写。需要稳定的服务端代理与密钥保护时，请使用 Flask 版。
+      </p>
+
+      <p class="settings-error" id="settingsError" role="alert" aria-live="polite"></p>
+
+      <p class="standalone-note">
+        <svg class="icon" aria-hidden="true"><use href="#icon-lock"></use></svg>
+        角色设定与聊天记录只属于这台设备，不会被上传到本页面以外的服务器。
+      </p>
+    </div>
+
+    <div class="settings-footer">
+      <button class="settings-clear" id="clearAllData" type="button">清除本地数据</button>
+      <div class="settings-footer-actions">
+        <button class="btn btn-ghost" id="cancelSettings" type="button">取消</button>
+        <button class="btn btn-primary" id="saveSettings" type="submit">保存设置</button>
+      </div>
+    </div>
+  </form>
+</dialog>

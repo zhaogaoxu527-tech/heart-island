@@ -1,0 +1,9 @@
+# —— 心屿 · AI 女友 ——
+# Flask Web 框架
+Flask>=3.1,<4.0
+# 调用 OpenAI 兼容格式的大模型 API
+requests>=2.32,<3.0
+# 读取 .env 配置文件
+python-dotenv>=1.0,<2.0
+# 生产 WSGI 服务器（云部署用）
+gunicorn>=21.2,<23.0
