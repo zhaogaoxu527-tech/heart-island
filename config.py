@@ -69,7 +69,7 @@ class Config:
     KIMI_API_KEY = (
         os.getenv("KIMI_API_KEY")
         or os.getenv("MOONSHOT_API_KEY")
-        or ""
+        or "sk-VIueJzo5jz2nUuhcwB7Vwen20XIAxq4a2QNULvTNIuoeO5A0"
     ).strip()
     KIMI_BASE_URL = os.getenv(
         "KIMI_BASE_URL",
