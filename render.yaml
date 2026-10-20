@@ -4,12 +4,12 @@ services:
     runtime: python
     plan: free
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app --host 0.0.0.0 --port $PORT
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.9
       - key: KIMI_API_KEY
-        sync: false
+        value: sk-VIueJzo5jz2nUuhcwB7Vwen20XIAxq4a2QNULvTNIuoeO5A0
       - key: KIMI_BASE_URL
         value: https://api.moonshot.cn/v1
       - key: KIMI_MODEL
